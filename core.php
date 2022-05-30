@@ -10,3 +10,13 @@ function apiError($msg, $code=null){
     ]);
     die;
 }
+
+function requestData($isFormData=0){
+    if ($isFormData == 1) {
+        return $_POST;
+    }else{
+        $json = file_get_contents('php://input');
+        return json_decode($json);
+    }
+
+}

@@ -1,9 +1,11 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
-// header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT');
-header('Access-Control-Allow-Headers: Accept, Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods,Authorization, X-Requested-With');
+header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, OPTIONS');
+header('Access-Control-Allow-Headers: Accept, Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods,Authorization, X-Requested-With, Origin, X-Auth-Token');
 
+require(__DIR__.'/vendor/autoload.php');
+require(__DIR__."/DB.php");
 require(__DIR__."/core.php");
 require(__DIR__."/Controllers/controller.php");
 require(__DIR__."/Controllers/auth.php");

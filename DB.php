@@ -22,6 +22,8 @@ class DB
 
     public static function createTables(){
         $stmt = self::connect();
+
+        
         $stmt->exec("CREATE TABLE users (
         id int(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         user_name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_persian_ci NOT NULL,
@@ -36,6 +38,16 @@ class DB
         deleted_at datetime DEFAULT NULL,
         created_at datetime NOT NULL DEFAULT current_timestamp
         )
-        COMMENT = 'Table ''new_tally_api.users'' doesn''t exist in engine';");
+        COMMENT = 'Table ''new_tally_api.users'' doesn''t exist in engine'");
+
+
+        $stmt->exec("CREATE TABLE tokens (
+            id int(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id int(255) NOT NULL,
+            token text CHARACTER SET utf8mb4 COLLATE utf8mb4_persian_ci NOT NULL,
+            exp int(255) NOT NULL,
+            created_at datetime NOT NULL DEFAULT current_timestamp
+          )
+          COMMENT = 'Table ''tally_api.tokens'' doesn''t exist in engine'");
     }
 }
