@@ -102,6 +102,10 @@ class Auth extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = (array)requestData();
             if ($post !== null) {
+
+                //save file-->
+//                move_uploaded_file($_FILES['image']['tmp_name'],"upload/".$_FILES['image']['name']);
+
                 //validate data==================            
                 $validator = new Validator;
                 $validation = $validator->make($post, [
@@ -173,5 +177,69 @@ class Auth extends Controller
             apiError('Method not allowed');
         }
         /* #endregion */
+    }
+
+    public function user(){
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+
+            // auth check
+            $headers = apache_request_headers();
+
+            if (!isset($headers['Authorization'])) {
+//                http_response_code(401);
+                echo json_encode([
+                    'message' => 'Unauthorized',
+                    'success'=> false,
+                ]);
+                die;
+            }
+            $user_token = str_replace("Bearer ", '', $headers['Authorization']);
+            $tokenFields = DB::query("SELECT * FROM tokens WHERE token = :token " , [
+                ':token' => $user_token
+            ]);
+            if (sizeof($tokenFields) == 0) {
+                echo json_encode([
+                    'message' => 'کاربر مورد نظر یافت نشد',
+                    'success'=> false,
+                ]);
+                die;
+            }
+            $tokenField = $tokenFields[0];
+            $user_id = $tokenField['user_id'];
+            $token = $tokenField['token'];
+            $exp = $tokenField['exp'];
+            $now = time();
+            if ($now > $exp) {
+                DB::query("DELETE FROM tokens WHERE token = :token " , [
+                    ':token' => $user_token
+                ]);
+                echo json_encode([
+                    'message' => 'اعتبار توکن به اتمام رسیده',
+                    'success'=> false,
+                ]);
+                die;
+            }
+
+
+
+
+            $user = DB::query("SELECT * FROM users WHERE id = :id" , [
+                ":id" => $user_id
+            ]);
+
+            $user = $user[0];
+            unset($user['password']);
+            unset($user['id']);
+            unset($user['deleted_at']);
+            echo json_encode([
+                'user' => $user,
+                'message' => 'کاربر با موفقیت دریافت شد',
+                'success'=> true,
+            ]);
+
+
+        } else{
+//            http_response_code(405);
+        }
     }
 }

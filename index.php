@@ -12,10 +12,10 @@ require(__DIR__."/Controllers/auth.php");
 
 
 // define varables
-$httpMethod = $_SERVER['REQUEST_METHOD'];
+$httpMethod = $_SERVER["REQUEST_METHOD"];
 
 //get uri
-$request_uri = $_SERVER['REQUEST_URI'];
+$request_uri = $_SERVER["REQUEST_URI"];
 
 
 // clear url
@@ -31,8 +31,8 @@ if (sizeof($urlArr) > 1) {
 
 //segmentation url (ex: localhost/api/controller/method)
 $url = explode('/', $url);
-if (sizeof($url) <= 1) apiError('Not found', 404);
-if (sizeof($url) <= 2) apiError('No Controller is exist', 404);
+if (sizeof($url) <= 1) apiError('Not found');
+if (sizeof($url) <= 2) apiError('No Controller is exist');
 $controllerSelected = (string) $url[2];
 $methodSelected = (string) $url[3];
 
